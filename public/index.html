@@ -14,26 +14,8 @@
     <div id="app"></div>
     <!-- built files will be auto injected -->
 
-    <div id="map"></div>
-
-    <script>
-      function initMap(){
-        createMap()
-      }
-
-      function createMap(){
-        const options = {
-          zoom: 8,
-          center: {lat: 9.0787, lng: 7.4702}
-        }
-
-        const map = new google.maps.Map(document.getElementById('map'), options)
-
-        return map
-      }
-    </script>
     <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCV9PPoz1EiR1r3jXjTbKfGaLhBzZsIfM&callback=initMap&v=weekly"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCV9PPoz1EiR1r3jXjTbKfGaLhBzZsIfM"
       async
     ></script>
   </body>
