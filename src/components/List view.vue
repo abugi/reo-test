@@ -37,22 +37,20 @@ export default {
 ol {
   width: 30%;
   flex-shrink: 0;
-  padding: 0 1.2rem;
 }
 
 li {
-  margin: 1.2rem 0;
+  padding: 0.6rem 0.2rem;
 }
 
 .location-name {
   color: #2366f1;
   display: inline-block;
   font-weight: 600;
-  padding: 0.2rem;
+  margin: 0;
 }
 
 .location-name:focus {
-  outline: none;
-  background: #ccc;
+  padding: 12px;
 }
 </style>
