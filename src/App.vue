@@ -19,18 +19,6 @@ export default {
     this.placePoint()
   },
   methods: {
-    getMap(callback) {
-      let vm = this
-      function checkForMap() {
-        if (vm.map) {
-          callback(vm.map)
-        } else {
-          setTimeout(checkForMap, 200)
-        }
-      }
-
-      checkForMap()
-    },
     addMap() {
       this.map = new window.google.maps.Map(this.$refs['map'], {
         center: this.center,
