@@ -15,15 +15,48 @@ export default {
     return {
       map: null,
       center: { lat: 9.0747, lng: 7.476 },
+      markers: [],
       placedPoints: [],
+      farthestPoint: 6384415.98,
+      distanceBetweenTwoPoints: [],
+      groups: [],
     }
   },
   mounted() {
-    this.addMap()
-    this.addMarker(this.center)
-    this.addMarker({ lat: 9.5836, lng: 6.5463 })
+    setTimeout(() => {
+      this.addMap()
+      // this.addMarker(this.center)
+      this.placePoint()
+    }, 150)
+  },
+  watch: {
+    placedPoints() {
+      if (this.placedPoints.length >= 9) {
+        console.log('group points')
+      }
+    },
+    markers() {
+      const markers = this.markers
+      const length = this.markers.length
 
-    this.placePoint()
+      if (length > 1) {
+        this.computeDistanceBetweenTwoPoints(
+          markers[length - 1],
+          markers[length - 2]
+        )
+
+        const prop = 'level'
+        const value = 'lower'
+
+        this.placedPoints[0][prop] = value
+        console.log(this.placedPoints[0])
+      }
+    },
+  },
+  computed: {
+    standardDistance() {
+      return (25 / 100) * this.farthestPoint
+    },
   },
   methods: {
     addMap() {
@@ -33,10 +66,13 @@ export default {
       })
     },
     addMarker(coords) {
-      new window.google.maps.Marker({
+      const marker = new window.google.maps.Marker({
         position: coords,
         map: this.map,
       })
+
+      // update markers array
+      this.markers.push(marker)
     },
     placePoint() {
       let lat
@@ -46,7 +82,9 @@ export default {
         lat = event.latLng.lat()
         lng = event.latLng.lng()
 
+        // add marker to place point
         this.addMarker({ lat: lat, lng: lng })
+
         this.placedPoints.push({
           name: await this.getGeoLocation(lat, lng),
           lat: lat,
@@ -65,6 +103,26 @@ export default {
 
       return data.results[data.results.length - 2].formatted_address
     },
+    computeDistanceBetweenTwoPoints(markerA, markerB) {
+      const distanceInMeters =
+        window.google.maps.geometry.spherical.computeDistanceBetween(
+          markerA.getPosition(),
+          markerB.getPosition()
+        )
+
+      this.distanceBetweenTwoPoints.push(distanceInMeters)
+      console.log(distanceInMeters)
+    },
+    // compareDistances() {
+    //   const arr = this.distanceBetweenTwoPoints
+
+    //   for (let i = 1; i < arr.length; i++) {
+    //     // arr[i] - arr[i - 1] < this.standardDistance ? this.groups.push({})
+    //     console.log(arr[i] - arr[i - 1])
+    //   }
+
+    //   console.log('standard distance', this.standardDistance)
+    // },
   },
 }
 </script>
