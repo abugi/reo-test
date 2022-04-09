@@ -30,27 +30,34 @@ export default {
     }, 150)
   },
   watch: {
-    placedPoints() {
-      if (this.placedPoints.length >= 9) {
-        console.log('group points')
-      }
-    },
+    // placedPoints() {
+    //   if (this.placedPoints.length >= 9) {
+    //     this.groupPoints(this.placedPoints)
+    //   }
+    // },
     markers() {
       const markers = this.markers
       const length = this.markers.length
+      let distanceInMeters
 
       if (length > 1) {
-        this.computeDistanceBetweenTwoPoints(
+        distanceInMeters = this.computeDistanceBetweenTwoPoints(
           markers[length - 1],
           markers[length - 2]
         )
 
         const prop = 'level'
-        const value = 'lower'
+        const value1 = 'higher'
+        const value2 = 'lower'
 
-        this.placedPoints[0][prop] = value
-        console.log(this.placedPoints[0])
+        if (distanceInMeters < this.standardDistance) {
+          this.placedPoints[0][prop] = value2
+        } else {
+          this.placedPoints[0][prop] = value1
+        }
       }
+
+      console.log(this.placedPoints)
     },
   },
   computed: {
@@ -110,19 +117,23 @@ export default {
           markerB.getPosition()
         )
 
-      this.distanceBetweenTwoPoints.push(distanceInMeters)
-      console.log(distanceInMeters)
+      return distanceInMeters
     },
-    // compareDistances() {
-    //   const arr = this.distanceBetweenTwoPoints
+    groupPoints(data) {
+      let result = data.groupBy(({ level }) => level)
 
-    //   for (let i = 1; i < arr.length; i++) {
-    //     // arr[i] - arr[i - 1] < this.standardDistance ? this.groups.push({})
-    //     console.log(arr[i] - arr[i - 1])
-    //   }
+      console.log(result)
+      // return data.reduce((groups, resultsToGroup) => {
+      //   const result = resultsToGroup.level
+      //   if (!groups[result]) {
+      //     groups[result] = []
+      //   }
+      //   groups[result].push(resultsToGroup)
 
-    //   console.log('standard distance', this.standardDistance)
-    // },
+      //   console.log(groups)
+      //   // return groups
+      // }, {})
+    },
   },
 }
 </script>
