@@ -1,6 +1,10 @@
 <template>
   <section class="container">
-    <ListView v-if="placedPoints.length" :placedPoints="placedPoints" />
+    <ListView
+      v-if="placedPoints.length"
+      :placedPoints="placedPoints"
+      :groups="groups"
+    />
     <div id="map" ref="map"></div>
   </section>
 </template>
@@ -19,7 +23,7 @@ export default {
       placedPoints: [],
       farthestPoint: 6384415.98,
       distanceBetweenTwoPoints: [],
-      groups: [],
+      groups: {},
     }
   },
   mounted() {
@@ -30,34 +34,30 @@ export default {
     }, 150)
   },
   watch: {
-    // placedPoints() {
-    //   if (this.placedPoints.length >= 9) {
-    //     this.groupPoints(this.placedPoints)
-    //   }
-    // },
+    placedPoints() {
+      if (this.placedPoints.length >= 9) {
+        this.groups = this.groupBy(this.placedPoints, 'level')
+      }
+    },
     markers() {
       const markers = this.markers
       const length = this.markers.length
       let distanceInMeters
 
-      if (length > 1) {
+      if (length % 2 === 0) {
         distanceInMeters = this.computeDistanceBetweenTwoPoints(
           markers[length - 1],
           markers[length - 2]
         )
 
-        const prop = 'level'
-        const value1 = 'higher'
-        const value2 = 'lower'
-
         if (distanceInMeters < this.standardDistance) {
-          this.placedPoints[0][prop] = value2
+          this.placedPoints[this.placedPoints.length - 2]['level'] = 'lower'
+          this.placedPoints[this.placedPoints.length - 1]['level'] = 'lower'
         } else {
-          this.placedPoints[0][prop] = value1
+          this.placedPoints[this.placedPoints.length - 2]['level'] = 'higher'
+          this.placedPoints[this.placedPoints.length - 1]['level'] = 'higher'
         }
       }
-
-      console.log(this.placedPoints)
     },
   },
   computed: {
@@ -89,14 +89,14 @@ export default {
         lat = event.latLng.lat()
         lng = event.latLng.lng()
 
-        // add marker to place point
-        this.addMarker({ lat: lat, lng: lng })
-
         this.placedPoints.push({
           name: await this.getGeoLocation(lat, lng),
           lat: lat,
           lng: lat,
         })
+
+        // add marker to place point
+        this.addMarker({ lat: lat, lng: lng })
       })
     },
     async getGeoLocation(lat, lng) {
@@ -119,20 +119,16 @@ export default {
 
       return distanceInMeters
     },
-    groupPoints(data) {
-      let result = data.groupBy(({ level }) => level)
-
-      console.log(result)
-      // return data.reduce((groups, resultsToGroup) => {
-      //   const result = resultsToGroup.level
-      //   if (!groups[result]) {
-      //     groups[result] = []
-      //   }
-      //   groups[result].push(resultsToGroup)
-
-      //   console.log(groups)
-      //   // return groups
-      // }, {})
+    groupBy(array, key) {
+      // Return the end result
+      return array.reduce((result, currentValue) => {
+        // If an array already present for key, push it to the array. Else create an array and push the object
+        ;(result[currentValue[key]] = result[currentValue[key]] || []).push(
+          currentValue
+        )
+        // Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
+        return result
+      }, {}) // empty object is the initial value for result object
     },
   },
 }
@@ -140,7 +136,6 @@ export default {
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
