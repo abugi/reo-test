@@ -11,8 +11,8 @@
     <ul v-if="Object.keys(groups).length">
       <li v-for="(group, index) in groups" :key="index">
         <section class="group-heading">
-          <div class="group-highlight" @click="changeHighlighColor"></div>
-          <div class="group-title">Group</div>
+          <div class="group-highlight"></div>
+          <div class="group-title" @click.self="changeHighlighColor">Group</div>
         </section>
         <div
           v-for="(item, index) in group"
@@ -72,7 +72,8 @@ export default {
       }
     },
     changeHighlighColor(event) {
-      event.target.style.backgroundColor = `#${this.generateRandomColor()}`
+      const target = event.target.previousElementSibling
+      target.style.backgroundColor = `#${this.generateRandomColor()}`
     },
   },
 }
@@ -121,10 +122,14 @@ ul > li {
   align-items: center;
 }
 
+.group-title {
+  cursor: pointer;
+  user-select: none;
+}
+
 .group-highlight {
   width: 12px;
   height: 12px;
   margin-right: 7px;
-  cursor: pointer;
 }
 </style>
