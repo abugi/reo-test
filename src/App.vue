@@ -32,10 +32,11 @@ export default {
       this.addMap()
       // this.addMarker(this.center)
       this.placePoint()
-    }, 150)
+    }, 500)
   },
   watch: {
     placedPoints() {
+      // Group locations when upto 9  points are placed
       if (this.placedPoints.length >= 9) {
         this.groups = this.groupBy(this.placedPoints, 'level')
       }
@@ -51,13 +52,7 @@ export default {
           markers[length - 2]
         )
 
-        if (distanceInMeters < this.standardDistance) {
-          this.placedPoints[this.placedPoints.length - 2]['level'] = 'lower'
-          this.placedPoints[this.placedPoints.length - 1]['level'] = 'lower'
-        } else {
-          this.placedPoints[this.placedPoints.length - 2]['level'] = 'higher'
-          this.placedPoints[this.placedPoints.length - 1]['level'] = 'higher'
-        }
+        this.assignGroupFlag(distanceInMeters)
       }
     },
   },
@@ -120,8 +115,19 @@ export default {
 
       return distanceInMeters
     },
+    assignGroupFlag(distance) {
+      const points = this.placedPoints
+      const prop = 'level' // the level key is useful for grouping placed points
+
+      if (distance < this.standardDistance) {
+        points[points.length - 2][prop] = 'lower'
+        points[points.length - 1][prop] = 'lower'
+      } else {
+        points[points.length - 2][prop] = 'higher'
+        points[points.length - 1][prop] = 'higher'
+      }
+    },
     groupBy(array, key) {
-      // Return the end result
       return array.reduce((result, currentValue) => {
         // If an array already present for key, push it to the array. Else create an array and push the object
         ;(result[currentValue[key]] = result[currentValue[key]] || []).push(

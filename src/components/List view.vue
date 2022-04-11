@@ -9,10 +9,12 @@
       </li>
     </ul>
     <ul v-if="Object.keys(groups).length">
-      <li v-for="(group, index) in groups" :key="index">
+      <li v-for="(group, key) in groups" :key="key">
         <section class="group-heading">
           <div class="group-highlight"></div>
-          <div class="group-title" @click.self="changeHighlighColor">Group</div>
+          <div class="group-title" @click.self="changeHighlighColor">
+            {{ key === 'undefined' ? 'Ungrouped' : 'Group' }}
+          </div>
         </section>
         <div
           v-for="(item, index) in group"
