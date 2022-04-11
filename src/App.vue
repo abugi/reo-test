@@ -22,12 +22,17 @@ export default {
       center: { lat: 9.0747, lng: 7.476 },
       markers: [],
       placedPoints: [],
-      farthestPoint: 6384415.98,
+      farthestPoint: 6384415.98, // Chimborazo's summit (farthest point on earth's surface)
       distanceBetweenTwoPoints: [],
       groups: {},
     }
   },
   mounted() {
+    const script = document.createElement('script')
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.VUE_APP_GOOGLE_MAP_JAVASCRIPT_API}&libraries=geometry`
+
+    document.body.appendChild(script)
+
     setTimeout(() => {
       this.addMap()
       // this.addMarker(this.center)
@@ -179,8 +184,7 @@ export default {
   #list-wrapper {
     order: 2;
     height: 50vh;
-    overflow-y: scroll;
-    overscroll-behavior-y: contain;
+    width: 100%;
   }
 }
 </style>

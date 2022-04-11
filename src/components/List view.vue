@@ -44,12 +44,11 @@ export default {
       default: () => {},
     },
   },
-  mounted() {
-    this.appplyHightlightColor('.group-highlight')
-  },
   watch: {
     groups() {
-      this.appplyHightlightColor('.group-highlight')
+      if (Object.keys(this.groups).length) {
+        this.appplyHightlightColor('.group-highlight')
+      }
     },
   },
   methods: {
@@ -65,13 +64,13 @@ export default {
       return Math.floor(100000 + Math.random() * 900000)
     },
     appplyHightlightColor(selector) {
-      if (Object.keys(this.groups).length) {
+      this.$nextTick(() => {
         const nodes = document.querySelectorAll(selector)
-        console.log(nodes)
+
         nodes.forEach((node) => {
           node.style.backgroundColor = `#${this.generateRandomColor()}`
         })
-      }
+      })
     },
     changeHighlighColor(event) {
       const target = event.target.previousElementSibling
@@ -87,6 +86,8 @@ export default {
   flex-shrink: 0;
   font-size: 0.9rem;
   padding: 0 1.5rem;
+  overflow-y: scroll;
+  overscroll-behavior-y: contain;
 }
 
 .location-name,
