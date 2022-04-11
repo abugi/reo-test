@@ -1,6 +1,7 @@
 <template>
   <section class="container">
     <ListView
+      id="list-wrapper"
       v-if="placedPoints.length"
       :placedPoints="placedPoints"
       :groups="groups"
@@ -147,10 +148,33 @@ export default {
   width: 100%;
   height: 100vh;
   background: #eee;
+  order: 2;
+}
+
+#list-wrapper {
+  order: 1;
 }
 
 .container {
   display: flex;
   flex-direction: row;
+}
+
+@media only screen and (max-width: 1024px) {
+  .container {
+    flex-direction: column;
+  }
+
+  #map {
+    order: 1;
+    height: 50vh;
+  }
+
+  #list-wrapper {
+    order: 2;
+    height: 50vh;
+    overflow-y: scroll;
+    overscroll-behavior-y: contain;
+  }
 }
 </style>
