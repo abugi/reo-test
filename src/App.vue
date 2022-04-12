@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import ListView from '@/components/List view.vue'
+import ListView from '@/components/ListView.vue'
 import axios from 'axios'
 export default {
   name: 'App',
