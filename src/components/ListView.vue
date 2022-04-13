@@ -1,6 +1,6 @@
 <template>
   <aside class="list-wrapper" @click.stop="eventDeligate">
-    <ul v-if="!Object.keys(groups).length">
+    <ul v-if="!groups" class="locations">
       <li v-for="(item, index) in placedPoints" :key="index">
         <span class="location-name">
           {{ item.name }}
@@ -8,7 +8,7 @@
         <span class="location-coords">{{ item.lat }}, {{ item.lng }}</span>
       </li>
     </ul>
-    <ul v-if="Object.keys(groups).length">
+    <ul v-if="groups" class="groups">
       <li v-for="(group, key) in groups" :key="key">
         <section class="group-heading">
           <div class="group-highlight"></div>
@@ -41,7 +41,7 @@ export default {
     },
     groups: {
       type: Object,
-      default: () => {},
+      default: null,
     },
   },
   watch: {

@@ -6,7 +6,7 @@
       :placedPoints="placedPoints"
       :groups="groups"
     />
-    <div id="map" ref="map"></div>
+    <main id="map" ref="map"></main>
   </section>
 </template>
 
@@ -24,7 +24,7 @@ export default {
       placedPoints: [],
       farthestPoint: 6384415.98, // Chimborazo's summit (farthest point on earth's surface)
       distanceBetweenTwoPoints: [],
-      groups: {},
+      groups: null,
     }
   },
   mounted() {
