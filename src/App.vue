@@ -89,25 +89,31 @@ export default {
       window.google.maps.event.addListener(this.map, 'click', async (event) => {
         lat = event.latLng.lat()
         lng = event.latLng.lng()
+        const name = await this.getGeoLocation(lat, lng)
+
+        if (!name) {
+          return
+        }
 
         this.placedPoints.push({
-          name: await this.getGeoLocation(lat, lng),
-          lat: lat,
-          lng: lat,
+          name,
+          lat,
+          lng,
         })
 
-        // add marker to place point
+        // add marker to placed point
         this.addMarker({ lat: lat, lng: lng })
       })
     },
     async getGeoLocation(lat, lng) {
+      // Reverse geolocation using longitute and latitude to get location name
       const { data } = await axios.get(
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.VUE_APP_GOOGLE_GEOLOCATION_API}`
       )
 
-      if (!data.results.length) {
+      if (data.results.length <= 1) {
         return
-      }
+      } // stop execution is marker is placed on a water body
 
       return data.results[data.results.length - 2].formatted_address
     },
@@ -134,7 +140,7 @@ export default {
     },
     groupBy(array, key) {
       return array.reduce((result, currentValue) => {
-        // If an array already present for key, push it to the array. Else create an array and push the object
+        // If an array is already present for key, push it to the array. Else create an array and push the object
         ;(result[currentValue[key]] = result[currentValue[key]] || []).push(
           currentValue
         )
