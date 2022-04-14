@@ -37,7 +37,7 @@ export default {
       this.addMap()
       // this.addMarker(this.center)
       this.placePoint()
-    }, 500)
+    }, 1000)
   },
   watch: {
     placedPoints() {
