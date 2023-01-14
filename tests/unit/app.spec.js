@@ -3,7 +3,6 @@ import App from '@/App.vue'
 
 describe('App', () => {
   it('ensure the map container is visible', () => {
-    
     const wrapper = mount(App)
 
     const mapContainer = wrapper.get('#map')
@@ -12,7 +11,6 @@ describe('App', () => {
   })
 
   it('does not render the map before it is injected', () => {
-    
     const wrapper = mount(App)
 
     const map = wrapper.get('#map')
@@ -21,7 +19,6 @@ describe('App', () => {
   })
 
   it('renders the map after it has been injected', () => {
-    
     const wrapper = mount(App)
 
     const map = wrapper.get('#map')
