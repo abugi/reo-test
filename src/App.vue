@@ -128,7 +128,7 @@ export default {
     },
     assignGroupFlag(distance) {
       const points = this.placedPoints
-      const prop = 'level' // the level key is useful for grouping placed points
+      const prop = 'level' //the level key is useful for grouping placed points
 
       if (distance < this.standardDistance) {
         points[points.length - 2][prop] = 'lower'
